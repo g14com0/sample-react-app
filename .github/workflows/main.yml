@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: build-sample-react-app
 on:
   workflow_dispatch:
   push:
@@ -9,15 +9,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      PROJECT: ${{ secrets.GCP_PROJECT_ID }}
+      PROJECT: "gcfr-352018"
     steps:
     - uses: actions/checkout@v2
 
-    - name: Login
-      uses: google-github-actions/setup-gcloud@master
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v0
       with:
-        service_account_email: ${{ secrets.GCP_EMAIL }}
-        service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+        credentials_json: ${{ secrets.GCFR_GOOGLE_CREDENTIALS }}
 
     - name: Configure Docker
       run: gcloud auth configure-docker --quiet
@@ -27,27 +26,28 @@ jobs:
         branchName="$(git rev-parse --abbrev-ref HEAD)"
         commitId="$(git rev-parse --short HEAD)"
         repoName="$(basename `git rev-parse --show-toplevel`)"
+
         if [[ ${branchName} == main ]] ; then
           prefix=M
-        elif [[ ${branchName} == HEAD ]]; then
-          prefix=PR
         else
           prefix=F-$(echo $branchName | cut -f 2 -d/)
         fi
+
         tag="$repoName:$prefix-$commitId-$(date '+%Y%m%d')"
         echo "TAG=$(echo $tag)" >> $GITHUB_ENV
+
     - name: Build
       run: docker build . -t eu.gcr.io/${{ env.PROJECT }}/${{ env.TAG }}
 
-    - name: Scan
-      uses: sysdiglabs/scan-action@v3.0.1
-      with:
-        image-tag: eu.gcr.io/${{ env.PROJECT }}/${{ env.TAG }}
-        sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
-        sysdig-secure-url: https://eu1.app.sysdig.com/
-        input-type: docker-daemon
-        run-as-user: root
-        input-path: /run/docker.sock
+#    - name: Scan
+#      uses: sysdiglabs/scan-action@v3.0.1
+#      with:
+#        image-tag: eu.gcr.io/${{ env.PROJECT }}/${{ env.TAG }}
+#        sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
+#        sysdig-secure-url: https://eu1.app.sysdig.com/
+#        input-type: docker-daemon
+#        run-as-user: root
+#        input-path: /run/docker.sock
         
     - name: Push
       run: docker push eu.gcr.io/${{ env.PROJECT }}/${{ env.TAG }}
