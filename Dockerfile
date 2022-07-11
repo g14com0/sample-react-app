@@ -1,4 +1,4 @@
-FROM gfurlan97/base-image:0-202207111
+FROM gfurlan97/base-image:1
 
 COPY . /build
 WORKDIR /build
