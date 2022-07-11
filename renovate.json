@@ -2,5 +2,13 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:base"
+  ],
+  "hostRules": [
+    {
+      "matchHost": "eu.gcr.io",
+      "authType": "Basic",
+      "username": "_json_key",
+      "password": "{{ secrets.GCFR_GOOGLE_CREDENTIALS }}"
+    }
   ]
 }
