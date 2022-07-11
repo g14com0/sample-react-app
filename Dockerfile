@@ -1,4 +1,4 @@
-FROM node:18.4.0-alpine3.16
+FROM eu.gcr.io/gcfr-352018/node:0-202207111
 
 COPY . /build
 WORKDIR /build
