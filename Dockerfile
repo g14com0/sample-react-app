@@ -1,4 +1,4 @@
-FROM eu.gcr.io/gcfr-352018/node:0-202207111
+FROM eu.gcr.io/gcfr-352018/node:1
 
 COPY . /build
 WORKDIR /build
