@@ -21,7 +21,7 @@ jobs:
       run: docker pull node:18.4.0-alpine3.16
 
     - name: Tag
-      run: docker tag node:18.4.0-alpine3.16 eu.gcr.io/${{ env.PROJECT }}/node:0-202207112
+      run: docker tag node:18.4.0-alpine3.16 eu.gcr.io/${{ env.PROJECT }}/node:1
         
     - name: Push
       run: docker push eu.gcr.io/${{ env.PROJECT }}/node:0-202207112
