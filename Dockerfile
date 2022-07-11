@@ -1,4 +1,4 @@
-FROM gfurlan97/base-image:1
+FROM node:18.4.0-alpine3.15
 
 COPY . /build
 WORKDIR /build
