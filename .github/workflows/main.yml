@@ -33,7 +33,7 @@ jobs:
           prefix=F-$(echo $branchName | cut -f 2 -d/)
         fi
 
-        tag="$repoName:$prefix-$commitId-$(date '+%Y%m%d')"
+        tag="$repoName:$prefix-$(date '+%Y%m%d')-$commitId"
         echo "TAG=$(echo $tag)" >> $GITHUB_ENV
 
     - name: Build
