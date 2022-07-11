@@ -1,4 +1,4 @@
-FROM eu.gcr.io/gcfr-352018/node:1
+FROM gfurlan97/base-image:0-202207111
 
 COPY . /build
 WORKDIR /build
